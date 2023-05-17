@@ -19,7 +19,7 @@ pygame.init()
 
 pygame.display.init()
 INFO = pygame.display.Info()
-TILE_SIZE = int(INFO.current_h * 0.065)
+TILE_SIZE = int(INFO.current_h * 0.06)
 WINDOW_SIZE = (14.85 * TILE_SIZE, 14.85 * TILE_SIZE)
 
 clock = None
@@ -86,7 +86,7 @@ def menu_loop():
         title_font_color=COLOR_BLACK,
         title_font=pygame_menu.font.FONT_BEBAS,
         widget_font_color=COLOR_BLACK,
-        widget_font_size=int(TILE_SIZE*0.7),
+        widget_font_size=int(TILE_SIZE*1),
         background_color=MENU_BACKGROUND_COLOR,
         title_background_color=MENU_TITLE_COLOR,
 

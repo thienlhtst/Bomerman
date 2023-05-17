@@ -319,9 +319,7 @@ def main(s, tile_size, show_path, terrain_images, bomb_images, explosion_images,
                     result = messagebox.showinfo("Notification","Player 1 win")
                 else:
                     result = messagebox.showinfo("Notification","We win")
-                    
                 running = False
-                
 
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
