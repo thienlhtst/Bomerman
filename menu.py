@@ -144,7 +144,7 @@ def menu_loop():
     about_menu.add.label("Player controls: ")
     about_menu.add.label("Movement: Arrows")
     about_menu.add.label("Plant bomb: Space")
-    about_menu.add.label("Author: Michal Sliwa")
+    about_menu.add.label("Author: 5ThanDang")
     about_menu.add.label("Sprite: ")
     about_menu.add.label("https://opengameart.org/ content/bomb-party-the-complete-set", wordwrap=True)
     about_menu.add.vertical_margin(25)

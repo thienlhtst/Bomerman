@@ -86,13 +86,13 @@ def game_init(surface, path, player_alg, player_alg1, en2_alg, en3_alg, scale):
     #     ene_blocks.append(en1)
 
     if en2_alg is not Algorithm.NONE:
-        en2 = Enemy(1, 11, en2_alg)
+        en2 = Enemy(1, 13, en2_alg)
         en2.load_animations('2', scale)
         enemy_list.append(en2)
         ene_blocks.append(en2)
 
     if en3_alg is not Algorithm.NONE:
-        en3 = Enemy(11, 1, en3_alg)
+        en3 = Enemy(13, 1, en3_alg)
         en3.load_animations('3', scale)
         enemy_list.append(en3)
         ene_blocks.append(en3)
@@ -313,7 +313,13 @@ def main(s, tile_size, show_path, terrain_images, bomb_images, explosion_images,
             if(game_ended == True):
                 window = tk.Tk()
                 window.withdraw()
-                result = messagebox.showinfo("You Lose","Bạn đã thua")
+                if not player.life:
+                    result = messagebox.showinfo("Notification","Player 2 win")
+                elif not player1.life:
+                    result = messagebox.showinfo("Notification","Player 1 win")
+                else:
+                    result = messagebox.showinfo("Notification","We win")
+                    
                 running = False
                 
 
