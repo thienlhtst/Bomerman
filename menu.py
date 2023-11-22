@@ -12,7 +12,7 @@ COLOR_BACKGROUND = (255, 184, 184)
 COLOR_BLACK = (0, 0, 0)
 COLOR_WHITE = (255, 255, 255)
 FPS = 60.0
-MENU_BACKGROUND_COLOR = (255, 204, 204)
+MENU_BACKGROUND_COLOR = (0, 128, 129)
 MENU_TITLE_COLOR = (255,255,255)
 WINDOW_SCALE = 1
 
@@ -36,7 +36,7 @@ show_path = True
 surface = pygame.display.set_mode(WINDOW_SIZE)
 
 #load sounds
-pygame.mixer.music.load('music/menu.wav')
+pygame.mixer.music.load('music/room.wav')
 pygame.mixer.music.play(-1, 0.0, 5000)
 
 def change_path(value, c):

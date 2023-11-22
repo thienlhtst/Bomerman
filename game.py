@@ -16,6 +16,7 @@ BACKGROUND_COLOR = (107, 142, 35)
 font = None
 player = None
 player1 = None
+backgroundmusic = None
 enemy_list = []
 ene_blocks = []
 bombs = []
@@ -34,7 +35,7 @@ def game_init(PickMap,surface, path, player_alg, player_alg1, en2_alg, en3_alg, 
     global ene_blocks
     global player
     global player1
-
+    global backgroundmusic
     enemy_list = []
     ene_blocks = []
     global explosions
@@ -46,15 +47,20 @@ def game_init(PickMap,surface, path, player_alg, player_alg1, en2_alg, en3_alg, 
     player1 = Player(13*4,13*4)
     player = Player(4,4)
     
+    
     if(Pick.ChooseMap is Map.Map1):
+        backgroundmusic=pygame.mixer.Sound('music/nongtrai.wav')
         grid = Pick.GRID_BASE_MapGrass
     if(Pick.ChooseMap is Map.Map2):
+        backgroundmusic=pygame.mixer.Sound('music/nongtrai.wav')
         grid = Pick.GRID_BASE_MapGrass1
     if(Pick.ChooseMap is Map.Map3):
+        backgroundmusic=pygame.mixer.Sound('music/map2.wav')
         grid = Pick.GRID_BASE_MapBox
     if(Pick.ChooseMap is Map.Map4):
+        backgroundmusic=pygame.mixer.Sound('music/map2.wav')
         grid = Pick.GRID_BASE_MapBox1
-    
+    backgroundmusic.play(-1)
     # if en1_alg is not Algorithm.NONE:
     #     en1 = Enemy(11, 11, en1_alg)
     #     en1.load_animations('1', scale)
@@ -296,45 +302,46 @@ def main(s, tile_size, show_path, terrain_images, bomb_images, explosion_images,
             Result,game_ended = check_end_game()
             window = tk.Tk()
             window.withdraw()
-            
+           
             if(Result == 1):
-                pygame.mixer.music.load('music/win.wav')
-                pygame.mixer.music.play(5)  
+                win= pygame.mixer.Sound('music/win.wav')
+                win.play()  
                 result = messagebox.showinfo("Notification","Player 2 win")
                 running = False
             if(Result == 2):
-                pygame.mixer.music.load('music/win.wav')
-                pygame.mixer.music.play(5)  
+                win= pygame.mixer.Sound('music/win.wav')
+                win.play()  
                 result = messagebox.showinfo("Notification","Player 1 win")
                 running = False
             if(Result ==3):
-                pygame.mixer.music.load('music/win.wav')
-                pygame.mixer.music.play(5)  
+                win= pygame.mixer.Sound('music/win.wav')
+                win.play()  
                 result = messagebox.showinfo("Notification","Monster win")
                 running = False
                 
             if(Result == 4):
-                pygame.mixer.music.load('music/win.wav')
-                pygame.mixer.music.play(5)  
+                win= pygame.mixer.Sound('music/win.wav')
+                win.play()  
                 result = messagebox.showinfo("Notification","Monster win")
                 running = False
             if(Result == 5):
-                pygame.mixer.music.load('music/win.wav')
-                pygame.mixer.music.play(5)  
+                win= pygame.mixer.Sound('music/win.wav')
+                win.play()  
                 result = messagebox.showinfo("Notification","Player 1 win")
                 running = False
             if(Result == 7):
-                pygame.mixer.music.load('music/win.wav')
-                pygame.mixer.music.play(5)  
+                win= pygame.mixer.Sound('music/win.wav')
+                win.play()  
                 result = messagebox.showinfo("Notification","Player 2 win")
                 running = False
             if(Result == 8):
-                pygame.mixer.music.load('music/win.wav')
-                pygame.mixer.music.play(5)  
+                win= pygame.mixer.Sound('music/win.wav')
+                win.play()  
                 result = messagebox.showinfo("Notification","Player 1 win")
                 running = False
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
+                
                 sys.exit(0)
             elif e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_RSHIFT:
@@ -379,8 +386,9 @@ def update_bombs(grid, dt):
     for e in explosions:
         e.update(dt)
         if e.time < 1:
-            pygame.mixer.music.load('music/bomb_bang.wav')
-            pygame.mixer.music.play(1)
+            a=pygame.mixer.Sound('music/bomb_bang.wav')
+            a.set_volume(0.5)
+            a.play()
             explosions.remove(e)
 def check_end_game():
     
