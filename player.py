@@ -8,7 +8,7 @@ class Player:
     frame = 0
     animation = []
     range = 3
-    bomb_limit = 2
+    bomb_limit = 1
     TILE_SIZE = 4
     def __init__(self,x,y):
         self.life = True

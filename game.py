@@ -91,7 +91,7 @@ def game_init(PickMap,surface, path, player_alg, player_alg1, en2_alg, en3_alg, 
         player.life = False
     else:
         player.life = False
-        
+    print(enemy_list.__len__)
     if player_alg1 is Algorithm.PLAYER2:
         player1.load_animations(scale,"Player2Image","hero")
         ene_blocks.append(player1)
@@ -393,21 +393,24 @@ def update_bombs(grid, dt):
 def check_end_game():
     
     if(checkplayer is Algorithm.PLAYER2):
-        if not player.life:
+        if(enemy_list == []):
+            if not player.life:
+                    return 7,False
+            if not player1.life:
+                    return 8,False
+        else:
+            if not player.life:
+                for en in enemy_list:
+                    if not en.life:
+                        return 1,False
+                
+            if not player1.life:
+                for en in enemy_list:
+                    if not en.life:
+                        return 2,False
             for en in enemy_list:
-                if not en.life:
-                    return 1,False
-        if not player1.life:
-            for en in enemy_list:
-                if not en.life:
-                    return 2,False
-        if not player.life:       
-                return 7,False
-        if not player1.life:       
-                return 8,False
-        for en in enemy_list:
-            if(not player.life and not player1.life):
-                return 3,False
+                if(not player.life and not player1.life):
+                    return 3,False
     else:
         if(not player.life):
             return 4,False
