@@ -6,16 +6,14 @@ import tkinter as tk
 from tkinter import messagebox
 from enums.power_up_type import PowerUpType
 from player import Player
-from player1 import Player1
 from explosion import Explosion
 from enemy import Enemy
 from enums.algorithm import Algorithm
+from enums.map import Map
+from Map import CreateMap
 from power_up import PowerUp
-
 BACKGROUND_COLOR = (107, 142, 35)
-
 font = None
-
 player = None
 player1 = None
 enemy_list = []
@@ -23,45 +21,15 @@ ene_blocks = []
 bombs = []
 explosions = []
 power_ups = []
-
-GRID_BASE = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-             [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
-             [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
-             [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-             [1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
-             [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
-             [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-             [1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1],
-             [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-             [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
-             [1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1],
-             [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
-             [1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1],
-             [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
-             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
-
-GRID_BASE1 = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-             [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-             [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-             [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-             [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-             [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-             [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
-             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
-
-
-def game_init(surface, path, player_alg, player_alg1, en2_alg, en3_alg, scale):
-
+checkplayer = None
+Pick = None
+def game_init(PickMap,surface, path, player_alg, player_alg1, en2_alg, en3_alg, scale):
+    global checkplayer
+    checkplayer = player_alg1
     global font
     font = pygame.font.SysFont('Bebas', scale)
-
+    global Pick
+    Pick = PickMap
     global enemy_list
     global ene_blocks
     global player
@@ -75,30 +43,39 @@ def game_init(surface, path, player_alg, player_alg1, en2_alg, en3_alg, scale):
     bombs.clear()
     explosions.clear()
     power_ups.clear()
-    player1 = Player1()
-    player = Player()
+    player1 = Player(13*4,13*4)
+    player = Player(4,4)
     
-
+    if(Pick.ChooseMap is Map.Map1):
+        grid = Pick.GRID_BASE_MapGrass
+    if(Pick.ChooseMap is Map.Map2):
+        grid = Pick.GRID_BASE_MapGrass1
+    if(Pick.ChooseMap is Map.Map3):
+        grid = Pick.GRID_BASE_MapBox
+    if(Pick.ChooseMap is Map.Map4):
+        grid = Pick.GRID_BASE_MapBox1
+    
     # if en1_alg is not Algorithm.NONE:
     #     en1 = Enemy(11, 11, en1_alg)
     #     en1.load_animations('1', scale)
     #     enemy_list.append(en1)
     #     ene_blocks.append(en1)
 
+    
     if en2_alg is not Algorithm.NONE:
-        en2 = Enemy(1, 13, en2_alg)
+        en2 = Enemy(2, 13, en2_alg)
         en2.load_animations('2', scale)
         enemy_list.append(en2)
         ene_blocks.append(en2)
 
     if en3_alg is not Algorithm.NONE:
-        en3 = Enemy(13, 1, en3_alg)
+        en3 = Enemy(13, 2, en3_alg)
         en3.load_animations('3', scale)
         enemy_list.append(en3)
         ene_blocks.append(en3)
 
     if player_alg is Algorithm.PLAYER:
-        player.load_animations(scale)
+        player.load_animations(scale,"hero","p")
         ene_blocks.append(player)
     elif player_alg is not Algorithm.NONE:
         en0 = Enemy(1, 1, player_alg)
@@ -109,11 +86,11 @@ def game_init(surface, path, player_alg, player_alg1, en2_alg, en3_alg, scale):
     else:
         player.life = False
         
-    if player_alg1 is Algorithm.PLAYERS:
-        player1.load_animations(scale)
+    if player_alg1 is Algorithm.PLAYER2:
+        player1.load_animations(scale,"Player2Image","hero")
         ene_blocks.append(player1)
     elif player_alg1 is not Algorithm.NONE:
-        en1 = Enemy(11, 11, player_alg1)
+        en1 = Enemy(13, 13, player_alg1)
         en1.load_animations('1', scale)
         enemy_list.append(en1)
         ene_blocks.append(en1)
@@ -121,8 +98,6 @@ def game_init(surface, path, player_alg, player_alg1, en2_alg, en3_alg, scale):
     else:
         player1.life = False
 
-    grass_img = pygame.image.load('images/terrain/grass.png')
-    grass_img = pygame.transform.scale(grass_img, (scale, scale))
 
     block_img = pygame.image.load('images/terrain/block.png')
     block_img = pygame.transform.scale(block_img, (scale, scale))
@@ -161,8 +136,26 @@ def game_init(surface, path, player_alg, player_alg1, en2_alg, en3_alg, scale):
 
     explosion3_img = pygame.image.load('images/explosion/3.png')
     explosion3_img = pygame.transform.scale(explosion3_img, (scale, scale))
+    
+    
+    Floor_img = pygame.image.load(Pick.CreateFloor)
+    Floor_img = pygame.transform.scale(Floor_img, (scale, scale))
+    
+    Block_img = pygame.image.load(Pick.CreateBlock)
+    Block_img = pygame.transform.scale(Block_img, (scale, scale))
+    
+    PossibleBox_img = pygame.image.load(Pick.CreatePossibleBox)
+    PossibleBox_img = pygame.transform.scale(PossibleBox_img, (scale, scale))
+    
+    Outline_img = pygame.image.load(Pick.CreateOutlineBlock)
+    Outline_img = pygame.transform.scale(Outline_img, (scale, scale))
 
-    terrain_images = [grass_img, block_img, box_img, grass_img]
+    
+
+    
+
+    terrain_images = [Floor_img,Block_img,PossibleBox_img,Floor_img,Outline_img]
+    
     bomb_images = [bomb1_img, bomb2_img, bomb3_img,bomb4_img,bomb5_img,bomb6_img,bomb7_img,bomb8_img]
     explosion_images = [explosion1_img, explosion2_img, explosion3_img]
 
@@ -174,9 +167,7 @@ def game_init(surface, path, player_alg, player_alg1, en2_alg, en3_alg, scale):
 
     power_ups_images = [power_up_bomb_img, power_up_fire_img]
 
-    main(surface, scale, path, terrain_images, bomb_images, explosion_images, power_ups_images)
-
-
+    main(surface, scale, path, terrain_images, bomb_images, explosion_images, power_ups_images,grid)
 def draw(s, grid, tile_size, show_path, game_ended, terrain_images, bomb_images, explosion_images, power_ups_images):
     s.fill(BACKGROUND_COLOR)
     for i in range(len(grid)):
@@ -215,9 +206,8 @@ def draw(s, grid, tile_size, show_path, game_ended, terrain_images, bomb_images,
         
 
     pygame.display.update()
-
-
 def generate_map(grid):
+    
     for i in range(1, len(grid) - 1):
         for j in range(1, len(grid[i]) - 1):
             if grid[i][j] != 0:
@@ -226,24 +216,18 @@ def generate_map(grid):
                 continue
             if random.randint(0, 9) < 7:
                 grid[i][j] = 2
-
+    print(grid)
     return
-
-
-def main(s, tile_size, show_path, terrain_images, bomb_images, explosion_images, power_ups_images):
-    t = random.randint(1,2)
-    if(t==1) :
-         grid = [row[:] for row in GRID_BASE1]
-    if(t==2):
-         grid = [row[:] for row in GRID_BASE]
-
+def main(s, tile_size, show_path, terrain_images, bomb_images, explosion_images, power_ups_images,pickmap):
+    
+    grid = [row[:] for row in pickmap]
     generate_map(grid)
-    # power_ups.append(PowerUp(1, 2, PowerUpType.BOMB))
-    # power_ups.append(PowerUp(2, 1, PowerUpType.FIRE))
+    
+   
     clock = pygame.time.Clock()
 
     running = True
-    game_ended = False
+    game_ended = True
     while running:
         dt = clock.tick(15)
         for en in enemy_list:
@@ -307,20 +291,48 @@ def main(s, tile_size, show_path, terrain_images, bomb_images, explosion_images,
                     player1.frame += 1
 
         draw(s, grid, tile_size, show_path, game_ended, terrain_images, bomb_images, explosion_images, power_ups_images)
-
-        if not game_ended:
-            game_ended = check_end_game()
-            if(game_ended == True):
-                window = tk.Tk()
-                window.withdraw()
-                if not player.life:
-                    result = messagebox.showinfo("Notification","Player 2 win")
-                elif not player1.life:
-                    result = messagebox.showinfo("Notification","Player 1 win")
-                else:
-                    result = messagebox.showinfo("Notification","We win")
+        if game_ended:
+            
+            Result,game_ended = check_end_game()
+            window = tk.Tk()
+            window.withdraw()
+            
+            if(Result == 1):
+                pygame.mixer.music.load('music/win.wav')
+                pygame.mixer.music.play(5)  
+                result = messagebox.showinfo("Notification","Player 2 win")
                 running = False
-
+            if(Result == 2):
+                pygame.mixer.music.load('music/win.wav')
+                pygame.mixer.music.play(5)  
+                result = messagebox.showinfo("Notification","Player 1 win")
+                running = False
+            if(Result ==3):
+                pygame.mixer.music.load('music/win.wav')
+                pygame.mixer.music.play(5)  
+                result = messagebox.showinfo("Notification","Monster win")
+                running = False
+                
+            if(Result == 4):
+                pygame.mixer.music.load('music/win.wav')
+                pygame.mixer.music.play(5)  
+                result = messagebox.showinfo("Notification","Monster win")
+                running = False
+            if(Result == 5):
+                pygame.mixer.music.load('music/win.wav')
+                pygame.mixer.music.play(5)  
+                result = messagebox.showinfo("Notification","Player 1 win")
+                running = False
+            if(Result == 7):
+                pygame.mixer.music.load('music/win.wav')
+                pygame.mixer.music.play(5)  
+                result = messagebox.showinfo("Notification","Player 2 win")
+                running = False
+            if(Result == 8):
+                pygame.mixer.music.load('music/win.wav')
+                pygame.mixer.music.play(5)  
+                result = messagebox.showinfo("Notification","Player 1 win")
+                running = False
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 sys.exit(0)
@@ -348,8 +360,6 @@ def main(s, tile_size, show_path, terrain_images, bomb_images, explosion_images,
     enemy_list.clear()
     ene_blocks.clear()
     power_ups.clear()
-
-
 def update_bombs(grid, dt):
     for b in bombs:
         b.update(dt)
@@ -369,17 +379,35 @@ def update_bombs(grid, dt):
     for e in explosions:
         e.update(dt)
         if e.time < 1:
+            pygame.mixer.music.load('music/bomb_bang.wav')
+            pygame.mixer.music.play(1)
             explosions.remove(e)
-
-
 def check_end_game():
-    if not player.life:
-        return True
     
-    if not player1.life:
-        return True
+    if(checkplayer is Algorithm.PLAYER2):
+        if not player.life:
+            for en in enemy_list:
+                if not en.life:
+                    return 1,False
+        if not player1.life:
+            for en in enemy_list:
+                if not en.life:
+                    return 2,False
+        if not player.life:       
+                return 7,False
+        if not player1.life:       
+                return 8,False
+        for en in enemy_list:
+            if(not player.life and not player1.life):
+                return 3,False
+    else:
+        if(not player.life):
+            return 4,False
+            
+        for en in enemy_list:
+            if not en.life:
+                return 5,False
+        return 6,True
+    return -1,True
 
-    for en in enemy_list:
-        if en.life:
-            return False
-    return True
+    

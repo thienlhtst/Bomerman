@@ -3,33 +3,23 @@ import math
 
 from bomb import Bomb
 from enums.power_up_type import PowerUpType
-
-
 class Player:
-    pos_x = 4
-    pos_y = 4
     direction = 0
     frame = 0
     animation = []
     range = 3
-    bomb_limit = 1
-
+    bomb_limit = 2
     TILE_SIZE = 4
-
-    def __init__(self):
+    def __init__(self,x,y):
         self.life = True
-
+        self.pos_x = x
+        self.pos_y = y
+    
     def move(self, dx, dy, grid, enemys, power_ups):
         tempx = int(self.pos_x / Player.TILE_SIZE)
         tempy = int(self.pos_y / Player.TILE_SIZE)
 
-        map = []
-
-        for i in range(len(grid)):
-            map.append([])
-            for j in range(len(grid[i])):
-                map[i].append(grid[i][j])
-
+        map = [row[:] for row in grid]
         for x in enemys:
             if x == self:
                 continue
@@ -37,6 +27,8 @@ class Player:
                 continue
             else:
                 map[int(x.pos_x / Player.TILE_SIZE)][int(x.pos_y / Player.TILE_SIZE)] = 2
+                
+        
 
         if self.pos_x % Player.TILE_SIZE != 0 and dx == 0:
             if self.pos_x % Player.TILE_SIZE == 1:
@@ -94,7 +86,7 @@ class Player:
 
         power_ups.remove(power_up)
 
-    def load_animations(self, scale):
+    def load_animations(self, scale,image,hero):
         front = []
         back = []
         left = []
@@ -102,11 +94,11 @@ class Player:
         resize_width = scale
         resize_height = scale
 
-        f1 = pygame.image.load('images/hero/pf0.png')
-        f2 = pygame.image.load('images/hero/pf1.png')
-        f3 = pygame.image.load('images/hero/pf2.png')
-        f4 = pygame.image.load('images/hero/pf3.png')
-        f5 = pygame.image.load('images/hero/pf4.png')
+        f1 = pygame.image.load('images/'+image+'/'+hero+'f0.png')
+        f2 = pygame.image.load('images/'+image+'/'+hero+'f1.png')
+        f3 = pygame.image.load('images/'+image+'/'+hero+'f2.png')
+        f4 = pygame.image.load('images/'+image+'/'+hero+'f3.png')
+        f5 = pygame.image.load('images/'+image+'/'+hero+'f4.png')
 
         f1 = pygame.transform.scale(f1, (resize_width, resize_height))
         f2 = pygame.transform.scale(f2, (resize_width, resize_height))
@@ -120,11 +112,11 @@ class Player:
         front.append(f4)
         front.append(f5)
 
-        r1 = pygame.image.load('images/hero/pr0.png')
-        r2 = pygame.image.load('images/hero/pr1.png')
-        r3 = pygame.image.load('images/hero/pr2.png')
-        r4 = pygame.image.load('images/hero/pr3.png')
-        r5 = pygame.image.load('images/hero/pr4.png')
+        r1 = pygame.image.load('images/'+image+'/'+hero+'r0.png')
+        r2 = pygame.image.load('images/'+image+'/'+hero+'r1.png')
+        r3 = pygame.image.load('images/'+image+'/'+hero+'r2.png')
+        r4 = pygame.image.load('images/'+image+'/'+hero+'r3.png')
+        r5 = pygame.image.load('images/'+image+'/'+hero+'r4.png')
 
         r1 = pygame.transform.scale(r1, (resize_width, resize_height))
         r2 = pygame.transform.scale(r2, (resize_width, resize_height))
@@ -138,11 +130,11 @@ class Player:
         right.append(r4)
         right.append(r5)
 
-        b1 = pygame.image.load('images/hero/pb0.png')
-        b2 = pygame.image.load('images/hero/pb1.png')
-        b3 = pygame.image.load('images/hero/pb2.png')
-        b4 = pygame.image.load('images/hero/pb3.png')
-        b5 = pygame.image.load('images/hero/pb4.png')
+        b1 = pygame.image.load('images/'+image+'/'+hero+'b0.png')
+        b2 = pygame.image.load('images/'+image+'/'+hero+'b1.png')
+        b3 = pygame.image.load('images/'+image+'/'+hero+'b2.png')
+        b4 = pygame.image.load('images/'+image+'/'+hero+'b3.png')
+        b5 = pygame.image.load('images/'+image+'/'+hero+'b4.png')
 
         b1 = pygame.transform.scale(b1, (resize_width, resize_height))
         b2 = pygame.transform.scale(b2, (resize_width, resize_height))
@@ -156,11 +148,11 @@ class Player:
         back.append(b4)
         back.append(b5)
 
-        l1 = pygame.image.load('images/hero/pl0.png')
-        l2 = pygame.image.load('images/hero/pl1.png')
-        l3 = pygame.image.load('images/hero/pl2.png')
-        l4 = pygame.image.load('images/hero/pl3.png')
-        l5 = pygame.image.load('images/hero/pl4.png')
+        l1 = pygame.image.load('images/'+image+'/'+hero+'l0.png')
+        l2 = pygame.image.load('images/'+image+'/'+hero+'l1.png')
+        l3 = pygame.image.load('images/'+image+'/'+hero+'l2.png')
+        l4 = pygame.image.load('images/'+image+'/'+hero+'l3.png')
+        l5 = pygame.image.load('images/'+image+'/'+hero+'l4.png')
 
         l1 = pygame.transform.scale(l1, (resize_width, resize_height))
         l2 = pygame.transform.scale(l2, (resize_width, resize_height))
@@ -174,6 +166,7 @@ class Player:
         left.append(l4)
         left.append(l5)
 
+        
         self.animation.append(front)
         self.animation.append(right)
         self.animation.append(back)

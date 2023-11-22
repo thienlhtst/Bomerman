@@ -7,4 +7,7 @@ class Algorithm(Enum):
     DIJKSTRA = 1
     PLAYER = 2
     NONE = 3
-    PLAYERS = 4
+    PLAYER2 = 4
+    
+    
+

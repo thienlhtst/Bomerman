@@ -3,14 +3,9 @@ import random
 from bomb import Bomb
 from node import Node
 from enums.algorithm import Algorithm
-
-
 class Enemy:
-
     dire = [[1, 0, 1], [0, 1, 0], [-1, 0, 3], [0, -1, 2]]
-
     TILE_SIZE = 4
-
     def __init__(self, x, y, alg):
         self.life = True
         self.path = []
@@ -24,9 +19,7 @@ class Enemy:
         self.bomb_limit = 1
         self.plant = False
         self.algorithm = alg
-
     def move(self, map, bombs, explosions, enemy):
-
         if self.direction == 0:
             self.pos_y += 1
         elif self.direction == 1:
@@ -35,7 +28,6 @@ class Enemy:
             self.pos_y -= 1
         elif self.direction == 3:
             self.pos_x -= 1
-
         if self.pos_x % Enemy.TILE_SIZE == 0 and self.pos_y % Enemy.TILE_SIZE == 0:
             self.movement_path.pop(0)
             self.path.pop(0)
@@ -45,13 +37,12 @@ class Enemy:
                 if grid[next[0]][next[1]] > 1:
                     self.movement_path.clear()
                     self.path.clear()
-
         if self.frame == 2:
             self.frame = 0
         else:
             self.frame += 1
-
-    def make_move(self, map, bombs, explosions, enemy):
+    #Xác định hành động tiếp theo dựa trên thuật toán di chuyển (DFS hoặc Dijkstra).
+    def make_move(self, map, bombs, explosions, enemy): 
 
         if not self.life:
             return
@@ -68,12 +59,12 @@ class Enemy:
         else:
             self.direction = self.movement_path[0]
             self.move(map, bombs, explosions, enemy)
-
+    # Đặt bom và giảm số lượng bom có thể đặt.
     def plant_bomb(self, map):
         b = Bomb(self.range, round(self.pos_x / Enemy.TILE_SIZE), round(self.pos_y / Enemy.TILE_SIZE), map, self)
         self.bomb_limit -= 1
         return b
-
+    # Kiểm tra xem Enemy có bị tiêu diệt bởi vụ nổ không.
     def check_death(self, exp):
 
         for e in exp:
@@ -92,7 +83,7 @@ class Enemy:
             self.dfs_rec(grid, 2, new_path, depth)
 
         self.path = new_path
-
+    #Thuật toán Tìm kiếm theo Chiều sâu để xác định đường đi.
     def dfs_rec(self, grid, end, path, depth):
 
         last = path[-1]
@@ -145,7 +136,7 @@ class Enemy:
                 self.movement_path.pop(0)
         depth += 1
         self.dfs_rec(grid, end, path, depth)
-
+    #Thuật toán Dijkstra để xác định đường đi.
     def dijkstra(self, grid):
 
         end = 1
@@ -214,7 +205,7 @@ class Enemy:
                     next_node = n
             open_list.remove(next_node)
             current = next_node
-
+    #create_grid và create_grid_dijkstra: Tạo lưới dựa trên tình hình hiện tại của bản đồ, bom, và vụ nổ.
     def create_grid(self, map, bombs, explosions, enemys):
         grid = [[0] * len(map) for r in range(len(map))]
 
@@ -249,7 +240,6 @@ class Enemy:
                 grid[int(x.pos_x / Enemy.TILE_SIZE)][int(x.pos_y / Enemy.TILE_SIZE)] = 2
 
         return grid
-
     def create_grid_dijkstra(self, map, bombs, explosions, enemys):
         grid = [[None] * len(map) for r in range(len(map))]
 
@@ -288,7 +278,7 @@ class Enemy:
                 grid[int(x.pos_x / Enemy.TILE_SIZE)][int(x.pos_y / Enemy.TILE_SIZE)].reach = False
                 grid[int(x.pos_x / Enemy.TILE_SIZE)][int(x.pos_y / Enemy.TILE_SIZE)].value = 1
         return grid
-
+    #Tải và chuyển đổi kích thước các hình ảnh cho các hướng di chuyển khác nhau của Enemy.
     def load_animations(self, en, scale):
         front = []
         back = []
